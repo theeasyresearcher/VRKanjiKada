@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VR Kanji Kada — Today's Menu</title>
+<meta name="description" content="Live menu for VR Kanji Kada, serving Kerala cuisine on campus. Prices, availability, and specials update automatically.">
+
+<!-- =========================================================================
+     SOCIAL SHARE PREVIEW (Open Graph / Twitter Card)
+     -----------------------------------------------------------------
+     Controls how the link looks when shared on WhatsApp, Instagram, iMessage,
+     etc. Site URL is set below to the live GitHub Pages address:
+     https://theeasyresearcher.github.io/VRKanjiKada/
+     once you have it, e.g. https://yourusername.github.io/vr-kanji-kada/
+     og-image.png is included alongside this file — upload it to the same
+     repo folder as index.html so the path below resolves correctly.
+     ========================================================================= -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="VR Kanji Kada — Live Menu">
+<meta property="og:description" content="Kerala cuisine, served on campus. See today's breakfast, lunch, biriyani and more, updated live.">
+<meta property="og:image" content="https://theeasyresearcher.github.io/VRKanjiKada/og-image.png">
+<meta property="og:url" content="https://theeasyresearcher.github.io/VRKanjiKada/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="VR Kanji Kada — Live Menu">
+<meta name="twitter:description" content="Kerala cuisine, served on campus. See today's breakfast, lunch, biriyani and more, updated live.">
+<meta name="twitter:image" content="https://theeasyresearcher.github.io/VRKanjiKada/og-image.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<style>
+  /* ============================= DESIGN TOKENS ============================= */
+  :root{
+    --bg: #F6F0DC;
+    --surface: #FFFDF6;
+    --surface-alt: #EFE6C6;
+    --text: #17241F;
+    --text-muted: #55604F;
+    --primary: #0E4D3C;
+    --primary-dark: #0A3A2D;
+    --accent: #D6A419;
+    --accent-dark: #B8890F;
+    --available: #2F7D4F;
+    --limited: #B8790F;
+    --unavailable: #A23B3B;
+    --border: #E3D6A8;
+    --shadow: 0 10px 24px -12px rgba(14,77,60,0.35);
+    --radius-card: 18px 18px 18px 4px;
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-body: 'Manrope', system-ui, -apple-system, Segoe UI, sans-serif;
+    --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+  }
+
+  [data-theme="dark"]{
+    --bg:#0E1D17;
+    --surface:#16281F;
+    --surface-alt:#1D3A2C;
+    --text:#F1ECDA;
+    --text-muted:#B7C4B7;
+    --primary:#4CBA8C;
+    --primary-dark:#2E7D5D;
+    --accent:#EABD53;
+    --accent-dark:#C79427;
+    --available:#6FCB98;
+    --limited:#F0C15E;
+    --unavailable:#E89494;
+    --border:#2B4838;
+    --shadow: 0 10px 24px -12px rgba(0,0,0,0.55);
+  }
+
+  *,*::before,*::after{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; font-size:17px; }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    transition:background .25s ease, color .25s ease;
+  }
+
+  h1,h2,h3{ font-family:var(--font-display); margin:0; color:var(--primary); }
+  [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3{ color:var(--text); }
+
+  a{ color:var(--primary); }
+
+  /* ============================= ACCESSIBILITY ============================= */
+  .skip-link{
+    position:absolute; left:-999px; top:0;
+    background:var(--primary); color:#fff;
+    padding:.75rem 1.1rem; border-radius:0 0 8px 0;
+    z-index:200; font-weight:700; text-decoration:none;
+  }
+  .skip-link:focus{ left:0; top:0; }
+
+  :focus-visible{
+    outline:3px solid var(--accent-dark);
+    outline-offset:2px;
+    border-radius:4px;
+  }
+
+  .visually-hidden{
+    position:absolute !important; width:1px; height:1px;
+    padding:0; margin:-1px; overflow:hidden;
+    clip:rect(0,0,0,0); white-space:nowrap; border:0;
+  }
+
+  /* ============================= HEADER ============================= */
+  .site-header{
+    background:var(--primary);
+    color:#FBF7E8;
+  }
+  .header-inner{
+    max-width:1100px; margin:0 auto;
+    padding:1.4rem 1.25rem 1.1rem;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:1rem; flex-wrap:wrap;
+  }
+  .brand{ display:flex; align-items:center; gap:.85rem; }
+  .brand-mark{
+    width:46px; height:46px; flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:50%; background:var(--accent); color:var(--primary-dark);
+  }
+  .brand h1{ color:#FBF7E8; font-size:clamp(1.45rem, 6vw, 1.75rem); letter-spacing:.2px; }
+  .tagline{ margin:.2rem 0 0; color:#DCE7DD; font-size:1rem; }
+
+  .header-actions{ display:flex; gap:.6rem; flex-wrap:wrap; }
+  .btn{
+    font-family:var(--font-body); font-weight:700; font-size:.95rem;
+    border:1px solid rgba(255,255,255,0.35);
+    background:rgba(255,255,255,0.08); color:#FBF7E8;
+    padding:.7rem 1.05rem; border-radius:999px; cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center; gap:.4rem;
+    min-height:44px;
+    transition:background .15s ease, transform .1s ease;
+  }
+  .btn:hover{ background:rgba(255,255,255,0.18); }
+  .btn:active{ transform:translateY(1px); }
+  .btn[aria-busy="true"]{ opacity:.7; cursor:progress; }
+
+  .kasavu-border{
+    height:8px;
+    background:repeating-linear-gradient(
+      115deg,
+      var(--accent) 0 12px,
+      var(--primary-dark) 12px 24px
+    );
+  }
+
+  /* ============================= CONTROLS ============================= */
+  .controls{
+    background:var(--surface);
+    border-bottom:1px solid var(--border);
+    box-shadow:var(--shadow);
+    position:relative;
+  }
+  .controls-close{
+    display:none;
+    position:absolute; top:.6rem; right:.6rem;
+    width:36px; height:36px; border-radius:50%;
+    border:1px solid var(--border); background:var(--surface-alt);
+    color:var(--text); font-size:1rem; cursor:pointer;
+    align-items:center; justify-content:center;
+  }
+  .controls-row{
+    max-width:1100px; margin:0 auto;
+    padding:1rem 1.1rem .6rem;
+    display:grid;
+    grid-template-columns:1.6fr 1fr 1fr;
+    gap:.7rem;
+  }
+  .field{ display:flex; flex-direction:column; gap:.35rem; min-width:0; }
+  .field label{ font-size:.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.04em; }
+  .field input, .field select{
+    font-family:var(--font-body); font-size:1rem;
+    padding:.75rem .8rem; border-radius:10px;
+    border:1.5px solid var(--border);
+    background:var(--bg); color:var(--text);
+    min-width:0; min-height:44px;
+  }
+  .field input:focus, .field select:focus{ border-color:var(--primary); }
+
+  .status-row{
+    max-width:1100px; margin:0 auto;
+    padding:.45rem 1.1rem 1rem;
+    display:flex; flex-wrap:wrap; gap:.4rem .55rem;
+    font-size:.92rem; color:var(--text-muted);
+  }
+  .status-row span[aria-hidden]{ opacity:.6; }
+  #countdown, #lastUpdated{ font-family:var(--font-mono); font-size:.85rem; }
+
+  #controlsSentinel{ height:1px; }
+
+  /* Floating mode: controls pop up above the FAB as a compact card */
+  .controls.floating-mode{
+    position:fixed; left:auto; right:1.1rem; bottom:5.7rem;
+    width:min(92vw, 380px); max-height:72vh; overflow-y:auto;
+    border-radius:18px; border:1px solid var(--border);
+    z-index:70; animation:controlsPopIn .18s ease;
+  }
+  .controls.floating-mode .controls-row{ grid-template-columns:1fr; padding-top:2.6rem; }
+  .controls.floating-mode .controls-close{ display:flex; }
+  @keyframes controlsPopIn{
+    from{ opacity:0; transform:translateY(8px) scale(.98); }
+    to{ opacity:1; transform:translateY(0) scale(1); }
+  }
+
+  .controls-backdrop{
+    position:fixed; inset:0; background:rgba(10,20,15,0.4);
+    z-index:65;
+  }
+  .controls-backdrop[hidden]{ display:none; }
+
+  .fab{
+    position:fixed; bottom:calc(1.25rem + env(safe-area-inset-bottom)); right:1.25rem; z-index:70;
+    width:56px; height:56px; border-radius:50%;
+    background:var(--primary); color:#FBF7E8; border:none;
+    box-shadow:var(--shadow); cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:transform .15s ease;
+  }
+  .fab:hover{ transform:scale(1.06); }
+  .fab[hidden]{ display:none; }
+
+  /* ============================= ERROR BANNER ============================= */
+  .error-banner{
+    max-width:1100px; margin:1rem auto 0; padding:0 1.25rem;
+  }
+  .error-banner .box{
+    background:#FBEAE7; border:1.5px solid var(--unavailable);
+    color:#7A2626; padding:.9rem 1.1rem; border-radius:12px;
+    font-size:.92rem;
+  }
+  [data-theme="dark"] .error-banner .box{ background:#3A1D1D; color:#F1B9B9; }
+  .error-banner .box strong{ display:block; margin-bottom:.2rem; }
+
+  /* ============================= CLOSED KITCHEN BANNER ============================= */
+  .closed-banner{
+    background:var(--unavailable); color:#FFF6F2;
+    text-align:center; padding:.9rem 1.1rem;
+    font-size:.95rem;
+  }
+  .closed-banner strong{ display:block; font-family:var(--font-display); font-size:1.15rem; margin-bottom:.15rem; }
+
+  /* ============================= TODAY'S SPECIALS ============================= */
+  .specials{ margin:1.4rem 0 2rem; }
+  .specials h2{
+    font-size:1.15rem; margin-bottom:.8rem;
+    display:flex; align-items:center; gap:.4rem;
+  }
+  .specials-row{
+    list-style:none; margin:0; padding:0 0 .3rem;
+    display:flex; gap:.85rem; overflow-x:auto;
+    scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch;
+  }
+  .specials-row .card{
+    scroll-snap-align:start; min-width:220px; max-width:240px; flex:0 0 auto;
+    border-left-color:var(--accent);
+    background:linear-gradient(160deg, var(--surface) 60%, var(--surface-alt));
+  }
+
+  /* ============================= MAIN / CATEGORIES ============================= */
+  main{ max-width:1100px; margin:0 auto; padding:1.4rem 1.1rem 3rem; }
+
+  .category{ margin-bottom:2.2rem; }
+  .category-heading{
+    display:flex; align-items:center; gap:.6rem; flex-wrap:wrap;
+    margin-bottom:.9rem; padding-bottom:.5rem;
+    border-bottom:2px solid var(--border);
+  }
+  .badge{
+    font-family:var(--font-display); font-weight:700; font-size:.72rem;
+    background:var(--primary); color:#FBF7E8;
+    padding:.32rem .6rem; border-radius:999px;
+    display:inline-flex; align-items:center; justify-content:center;
+    flex:0 0 auto; letter-spacing:.03em;
+  }
+  .category-heading h2{ font-size:1.3rem; }
+  .category-count{ font-size:.88rem; color:var(--text-muted); margin-left:auto; }
+
+  .card-grid{
+    list-style:none; margin:0; padding:0;
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(230px, 1fr));
+    gap:.9rem;
+  }
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius-card);
+    padding:1.05rem 1.1rem;
+    box-shadow:var(--shadow);
+    display:flex; flex-direction:column; gap:.55rem;
+    border-left:5px solid var(--available);
+  }
+  .card.status-limited{ border-left-color:var(--limited); }
+  .card.status-unavailable{ border-left-color:var(--unavailable); opacity:.75; }
+
+  .card-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:.6rem; }
+  .card-top h3{ font-size:1.08rem; color:var(--text); line-height:1.32; }
+  .price{ font-family:var(--font-mono); font-weight:600; font-size:1.02rem; color:var(--accent-dark); white-space:nowrap; }
+  [data-theme="dark"] .price{ color:var(--accent); }
+
+  .card-meta{ display:flex; align-items:center; gap:.7rem; flex-wrap:wrap; }
+  .badge-status{
+    display:inline-flex; align-items:center; gap:.4rem;
+    font-size:.78rem; font-weight:700; text-transform:capitalize; letter-spacing:.02em;
+    color:var(--text-muted);
+  }
+  .badge-status::before{
+    content:""; width:8px; height:8px; border-radius:50%;
+    background:currentColor; flex:0 0 auto;
+  }
+  .badge-status.available{ color:var(--available); }
+  .badge-status.limited{ color:var(--limited); }
+  .badge-status.unavailable{ color:var(--unavailable); }
+
+  .menu-date{ font-size:.8rem; color:var(--text-muted); }
+  .note{ margin:0; font-size:.92rem; color:var(--text-muted); font-style:italic; }
+
+  /* ============================= EMPTY STATE ============================= */
+  .empty-state{
+    text-align:center; padding:3rem 1rem; color:var(--text-muted);
+    border:2px dashed var(--border); border-radius:16px;
+  }
+  .empty-state p{ margin:.2rem 0; }
+  .empty-state p:first-child{ font-family:var(--font-display); font-size:1.2rem; color:var(--text); }
+
+  footer{
+    text-align:center; padding:1.5rem 1.25rem 2.5rem;
+    color:var(--text-muted); font-size:.92rem;
+  }
+  footer p{ margin:.3rem 0; }
+
+  /* ============================= RESPONSIVE ============================= */
+  @media (max-width:780px){
+    html{ font-size:16px; }
+    .controls-row{ grid-template-columns:1fr; }
+    .header-inner{ flex-direction:column; align-items:flex-start; padding:1.1rem 1rem .9rem; }
+    .header-actions{ width:100%; gap:.5rem; }
+    .header-actions .btn{ flex:1 1 0; padding:.65rem .5rem; font-size:.82rem; }
+    .category-count{ margin-left:0; width:100%; }
+    main{ padding:1.1rem .9rem 5rem; }
+    .card-grid{ grid-template-columns:1fr; }
+    .card-top h3{ font-size:1.02rem; }
+    .category-heading h2{ font-size:1.15rem; }
+    .specials-row .card{ min-width:200px; }
+    .controls.floating-mode{ right:.75rem; bottom:5.4rem; width:min(94vw,380px); }
+    .fab{ right:1rem; }
+  }
+
+  @media (max-width:380px){
+    .btn-label{
+      position:absolute !important; width:1px; height:1px;
+      padding:0; margin:-1px; overflow:hidden;
+      clip:rect(0,0,0,0); white-space:nowrap; border:0;
+    }
+    .header-actions .btn{ flex:0 0 auto; width:44px; height:44px; padding:0; border-radius:50%; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to menu</a>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 13c0 5 3.5 8.5 8 8.5 4.8 0 8-4 8-9 0-6-4.5-9.5-11-9.5 1.5 2 2 4 1.5 6.5C9 8 6.5 6.5 5 4c-1.5 3-1 6.5-1 9z" fill="currentColor"/>
+        </svg>
+      </span>
+      <div>
+        <h1>VR Kanji Kada</h1>
+        <p class="tagline">Kerala cuisine · fresh &amp; homely, made for campus life</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button type="button" id="shareBtn" class="btn"><span aria-hidden="true">📤</span><span class="btn-label">Share menu</span></button>
+      <button type="button" id="themeToggle" class="btn" aria-pressed="false"><span aria-hidden="true">🌙</span><span class="btn-label">Dark mode</span></button>
+      <button type="button" id="refreshBtn" class="btn"><span aria-hidden="true">⟳</span><span class="btn-label">Refresh now</span></button>
+    </div>
+  </div>
+  <div class="kasavu-border" aria-hidden="true"></div>
+</header>
+
+<section class="controls" id="controlsPanel" aria-label="Search and filter the menu">
+  <button type="button" id="controlsClose" class="controls-close" aria-label="Close filters">✕</button>
+  <form class="controls-row" role="search" onsubmit="return false;">
+    <div class="field">
+      <label for="searchInput">Search menu</label>
+      <input type="search" id="searchInput" placeholder="Try “puttu”, “biriyani”, “fish fry”…" autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="categoryFilter">Category</label>
+      <select id="categoryFilter">
+        <option value="all">All Categories</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="availabilityFilter">Availability</label>
+      <select id="availabilityFilter">
+        <option value="all">All</option>
+        <option value="available">Available</option>
+        <option value="limited">Limited</option>
+        <option value="unavailable">Unavailable</option>
+      </select>
+    </div>
+  </form>
+  <div class="status-row" id="statusRow" aria-live="polite">
+    <span id="visibleCount">Loading…</span>
+    <span aria-hidden="true">·</span>
+    <span id="activeCategoryCount"></span>
+    <span aria-hidden="true">·</span>
+    <span id="lastUpdated">Fetching menu…</span>
+    <span aria-hidden="true">·</span>
+    <span id="countdown"></span>
+  </div>
+</section>
+<div id="controlsSentinel" aria-hidden="true"></div>
+<div id="controlsBackdrop" class="controls-backdrop" hidden></div>
+<button type="button" id="controlsFab" class="fab" aria-expanded="false" aria-controls="controlsPanel" hidden>
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M3 4h18l-7 8v6l-4 2v-8L3 4z" fill="currentColor"/>
+  </svg>
+  <span class="visually-hidden">Open search and filters</span>
+</button>
+
+
+<div class="error-banner" id="errorBanner" role="alert" hidden>
+  <div class="box">
+    <strong>The menu couldn't be loaded.</strong>
+    <span id="errorMessage">Please check the Google Sheet link and try again.</span>
+  </div>
+</div>
+
+<div class="closed-banner" id="closedBanner" role="alert" hidden>
+  <strong>Kitchen closed today</strong>
+  <span id="closedMessage"></span>
+</div>
+
+<main id="main">
+  <section class="specials" id="specialsStrip" aria-labelledby="specialsHeading" hidden>
+    <h2 id="specialsHeading">✨ Today's Specials</h2>
+    <ul class="specials-row" id="specialsRow" role="list"></ul>
+  </section>
+  <div id="menuRoot"></div>
+  <div class="empty-state" id="emptyState" hidden>
+    <p>No dishes match right now.</p>
+    <p>Try clearing the search box or switching the availability filter.</p>
+  </div>
+</main>
+
+<footer>
+  <p>VR Kanji Kada · Menu is managed live by staff. All prices in ₹.</p>
+  <p>Developed by Schrödinger's Student Initiative</p>
+  <p><a href="https://sites.google.com/view/schrodingersstudent/initiatives" target="_blank" rel="noopener">https://sites.google.com/view/schrodingersstudent/initiatives</a></p>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =====================================================================
+     STEP 1 — CONNECT YOUR GOOGLE SHEET
+     -----------------------------------------------------------------
+     Paste your published CSV link between the quotes below.
+     That is the ONLY line staff or admins ever need to touch.
+     Nothing else in this file needs to change for the live menu to work.
+
+     This is already set to the direct CSV export link for the sheet
+     shared with Claude. For this to load, the sheet's sharing must be
+     set to "Anyone with the link – Viewer" (Share button, top right of
+     Google Sheets). If you add more tabs later and need a specific one,
+     append &gid=YOUR_TAB_ID to the end of this URL.
+
+     Alternative (also works, sometimes updates more reliably): File >
+     Share > Publish to web > choose the menu tab > CSV format > Publish,
+     then paste that link here instead. Full steps are in the big comment
+     block near the bottom of this file.
+     ===================================================================== */
+  const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHYoNBSB4XuCymV0Khl4oryCzoYQQZlucCdXnABbVfXTHbpt9hv00W2MS7n-rb3YaLvxc1tUgQb3UQ/pub?gid=1334240059&single=true&output=csv";
+
+  /* =====================================================================
+     STEP 1B — CONNECT THE "CLOSED DAYS" TAB (optional)
+     -----------------------------------------------------------------
+     Add a second tab to the same Google Sheet named "Closed Days" with
+     two columns: date, reason (dates as YYYY-MM-DD, e.g. 2026-08-15).
+     Publish that tab to the web as CSV (same steps as the menu tab) and
+     paste its link below. If today's date matches a row, the site shows
+     a "Kitchen closed" banner using that row's reason as the message.
+     Leave the placeholder as-is to skip this feature entirely.
+     ===================================================================== */
+  const CLOSED_DAYS_CSV_URL = "PASTE_YOUR_CLOSED_DAYS_CSV_LINK_HERE";
+
+  const REFRESH_SECONDS = 120; // auto-refresh interval, in seconds
+
+  /* Category order + short badge codes shown on the menu. Keys must match
+     the lowercase "category" values used in the Google Sheet. */
+  const CATEGORY_ORDER = [
+    { key: "breakfast",          label: "Breakfast",           code: "BF" },
+    { key: "breads",             label: "Breads",              code: "BD" },
+    { key: "lunch",               label: "Lunch",               code: "LN" },
+    { key: "dinner",              label: "Dinner",              code: "DN" },
+    { key: "veg curry",           label: "Veg Curry",           code: "VC" },
+    { key: "non veg curry",       label: "Non Veg Curry",       code: "NVC" },
+    { key: "naadan veg curry",    label: "Naadan Veg Curry",    code: "NDV" },
+    { key: "naadan non veg curry",label: "Naadan Non Veg Curry",code: "NDN" },
+    { key: "naadan kerala items", label: "Naadan Kerala Items", code: "NKI" },
+    { key: "noodles",             label: "Noodles",             code: "NO" },
+    { key: "fried rice",          label: "Fried Rice",          code: "FR" },
+    { key: "biriyani",            label: "Biriyani",            code: "BR" },
+    { key: "fish items",          label: "Fish Items",          code: "FI" },
+    { key: "snacks",              label: "Snacks",              code: "SN" },
+    { key: "hot drinks",          label: "Hot Drinks",          code: "HD" },
+    { key: "special",             label: "Special",             code: "SP" },
+    { key: "others",              label: "Others",              code: "OT" }
+  ];
+  const CATEGORY_KEYS = CATEGORY_ORDER.map(c => c.key);
+  const AVAILABILITY_VALUES = ["available", "limited", "unavailable"];
+
+  function populateCategoryFilter() {
+    CATEGORY_ORDER.forEach(cat => {
+      const opt = document.createElement("option");
+      opt.value = cat.key;
+      opt.textContent = cat.label;
+      categoryFilter.appendChild(opt);
+    });
+  }
+
+  /* ---------------------------- DOM refs ---------------------------- */
+  const menuRoot = document.getElementById("menuRoot");
+  const emptyState = document.getElementById("emptyState");
+  const errorBanner = document.getElementById("errorBanner");
+  const errorMessage = document.getElementById("errorMessage");
+  const searchInput = document.getElementById("searchInput");
+  const categoryFilter = document.getElementById("categoryFilter");
+  const availabilityFilter = document.getElementById("availabilityFilter");
+  const visibleCountEl = document.getElementById("visibleCount");
+  const activeCategoryCountEl = document.getElementById("activeCategoryCount");
+  const lastUpdatedEl = document.getElementById("lastUpdated");
+  const countdownEl = document.getElementById("countdown");
+  const refreshBtn = document.getElementById("refreshBtn");
+  const themeToggle = document.getElementById("themeToggle");
+  const controlsPanel = document.getElementById("controlsPanel");
+  const controlsSentinel = document.getElementById("controlsSentinel");
+  const controlsBackdrop = document.getElementById("controlsBackdrop");
+  const controlsFab = document.getElementById("controlsFab");
+  const controlsClose = document.getElementById("controlsClose");
+  const closedBanner = document.getElementById("closedBanner");
+  const closedMessage = document.getElementById("closedMessage");
+  const specialsStrip = document.getElementById("specialsStrip");
+  const specialsRow = document.getElementById("specialsRow");
+  const shareBtn = document.getElementById("shareBtn");
+
+  let allItems = [];
+  let secondsRemaining = REFRESH_SECONDS;
+  let tickHandle = null;
+
+  /* ---------------------------- CSV parsing ---------------------------- */
+  // Handles quoted fields, embedded commas, escaped quotes ("") and CRLF/LF.
+  function parseCSV(text) {
+    const rows = [];
+    let field = "", row = [], inQuotes = false;
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+      if (inQuotes) {
+        if (char === '"') {
+          if (text[i + 1] === '"') { field += '"'; i++; }
+          else { inQuotes = false; }
+        } else {
+          field += char;
+        }
+      } else if (char === '"') {
+        inQuotes = true;
+      } else if (char === ",") {
+        row.push(field); field = "";
+      } else if (char === "\r") {
+        // ignore, handled by \n
+      } else if (char === "\n") {
+        row.push(field); rows.push(row); row = []; field = "";
+      } else {
+        field += char;
+      }
+    }
+    if (field.length > 0 || row.length > 0) { row.push(field); rows.push(row); }
+    return rows.filter(r => r.some(cell => cell.trim() !== ""));
+  }
+
+  function escapeHTML(str) {
+    return String(str).replace(/[&<>"']/g, c => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[c]));
+  }
+
+  function normalizeItem(raw) {
+    const catRaw = (raw.category || "").toLowerCase().trim();
+    const category = CATEGORY_KEYS.includes(catRaw) ? catRaw : "others";
+
+    const availRaw = (raw.availability || "").toLowerCase().trim();
+    const availability = AVAILABILITY_VALUES.includes(availRaw) ? availRaw : "available";
+
+    const priceNum = parseFloat(String(raw.price || "").replace(/[^0-9.\-]/g, ""));
+    const price = isNaN(priceNum) ? null : priceNum;
+
+    const sortNum = parseInt(raw.sort_order, 10);
+    const sort_order = isNaN(sortNum) ? 9999 : sortNum;
+
+    return {
+      category,
+      item_name: (raw.item_name || "").trim() || "Unnamed item",
+      price,
+      availability,
+      note: (raw.note || "").trim(),
+      sort_order,
+      menu_date: (raw.menu_date || "").trim()
+    };
+  }
+
+  function buildCacheBustedUrl(url) {
+    const sep = url.indexOf("?") === -1 ? "?" : "&";
+    return url + sep + "_ts=" + Date.now();
+  }
+
+  /* ---------------------------- Fetch + render cycle ---------------------------- */
+  async function fetchMenu(isManual) {
+    fetchClosedDays();
+
+    if (!GOOGLE_SHEET_CSV_URL || GOOGLE_SHEET_CSV_URL.indexOf("PASTE_YOUR_PUBLISHED_CSV_LINK_HERE") !== -1) {
+      showError("No Google Sheet is connected yet. Open index.html, find GOOGLE_SHEET_CSV_URL near the top of the script, and paste your published CSV link there.");
+      resetCountdown();
+      return;
+    }
+
+    if (refreshBtn) refreshBtn.setAttribute("aria-busy", "true");
+    if (isManual) lastUpdatedEl.textContent = "Refreshing…";
+
+    try {
+      const res = await fetch(buildCacheBustedUrl(GOOGLE_SHEET_CSV_URL), { cache: "no-store" });
+      if (!res.ok) throw new Error("The sheet responded with status " + res.status + ".");
+
+      const text = await res.text();
+      const rows = parseCSV(text);
+      if (rows.length < 2) throw new Error("The published sheet looks empty. Add at least one menu row below the header.");
+
+      const header = rows[0].map(h => h.trim().toLowerCase());
+      const items = rows.slice(1).map(r => {
+        const obj = {};
+        header.forEach((h, idx) => { obj[h] = (r[idx] !== undefined ? r[idx] : "").trim(); });
+        return normalizeItem(obj);
+      });
+
+      allItems = items;
+      lastUpdatedEl.textContent = "Updated " + formatTime(new Date());
+      hideError();
+      renderAll();
+      renderSpecials();
+    } catch (err) {
+      if (window.location.protocol === "file:") {
+        showError("This page was opened directly from a file (file://), so the browser blocks it from fetching the Google Sheet. Serve it over http/https instead \u2014 e.g. deploy to GitHub Pages, or run a local server such as \u201cpython -m http.server\u201d \u2014 and reload.");
+      } else if (err instanceof TypeError) {
+        showError("Couldn't reach the Google Sheet. Check your internet connection, and make sure the sheet is still published (File > Share > Publish to web) with the CSV link unchanged.");
+      } else {
+        showError(err.message || "Something went wrong while loading the menu.");
+      }
+      if (allItems.length === 0) {
+        lastUpdatedEl.textContent = "Not loaded yet";
+      }
+    } finally {
+      if (refreshBtn) refreshBtn.removeAttribute("aria-busy");
+      resetCountdown();
+    }
+  }
+
+  /* ---------------------------- Closed days / kitchen-closed banner ---------------------------- */
+  function todayISO() {
+    const d = new Date();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return d.getFullYear() + "-" + mm + "-" + dd;
+  }
+
+  function normalizeDateCell(raw) {
+    const s = (raw || "").trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s; // already YYYY-MM-DD
+    const parsed = new Date(s);
+    if (isNaN(parsed.getTime())) return "";
+    const mm = String(parsed.getMonth() + 1).padStart(2, "0");
+    const dd = String(parsed.getDate()).padStart(2, "0");
+    return parsed.getFullYear() + "-" + mm + "-" + dd;
+  }
+
+  async function fetchClosedDays() {
+    if (!CLOSED_DAYS_CSV_URL || CLOSED_DAYS_CSV_URL.indexOf("PASTE_YOUR_CLOSED_DAYS_CSV_LINK_HERE") !== -1) {
+      return; // feature not configured, skip silently
+    }
+    try {
+      const res = await fetch(buildCacheBustedUrl(CLOSED_DAYS_CSV_URL), { cache: "no-store" });
+      if (!res.ok) return;
+      const rows = parseCSV(await res.text());
+      if (rows.length < 2) { closedBanner.hidden = true; return; }
+      const header = rows[0].map(h => h.trim().toLowerCase());
+      const dateIdx = header.indexOf("date");
+      const reasonIdx = header.indexOf("reason");
+      if (dateIdx === -1) { closedBanner.hidden = true; return; }
+
+      const today = todayISO();
+      const match = rows.slice(1).find(r => normalizeDateCell(r[dateIdx]) === today);
+      if (match) {
+        const reason = reasonIdx !== -1 ? (match[reasonIdx] || "").trim() : "";
+        closedMessage.textContent = reason || "We are closed today. Sorry for the inconvenience!";
+        closedBanner.hidden = false;
+      } else {
+        closedBanner.hidden = true;
+      }
+    } catch (err) {
+      // silent fail — don't block the menu over an optional feature
+    }
+  }
+
+  function showError(message) {
+    errorMessage.textContent = message;
+    errorBanner.hidden = false;
+  }
+  function hideError() {
+    errorBanner.hidden = true;
+  }
+
+  function formatTime(date) {
+    return date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  }
+
+  /* ---------------------------- Countdown ---------------------------- */
+  function resetCountdown() {
+    clearInterval(tickHandle);
+    secondsRemaining = REFRESH_SECONDS;
+    updateCountdownDisplay();
+    tickHandle = setInterval(() => {
+      secondsRemaining--;
+      if (secondsRemaining <= 0) {
+        fetchMenu(false);
+      } else {
+        updateCountdownDisplay();
+      }
+    }, 1000);
+  }
+  function updateCountdownDisplay() {
+    const m = Math.floor(secondsRemaining / 60);
+    const s = String(secondsRemaining % 60).padStart(2, "0");
+    countdownEl.textContent = "Next refresh in " + m + ":" + s;
+  }
+
+  /* ---------------------------- Filter / sort / render ---------------------------- */
+  function getFiltered() {
+    const term = searchInput.value.trim().toLowerCase();
+    const catFilter = categoryFilter.value;
+    const availFilter = availabilityFilter.value;
+    return allItems.filter(it => {
+      if (catFilter !== "all" && it.category !== catFilter) return false;
+      if (availFilter !== "all" && it.availability !== availFilter) return false;
+      if (term) {
+        const hay = (it.item_name + " " + it.note + " " + it.category).toLowerCase();
+        if (hay.indexOf(term) === -1) return false;
+      }
+      return true;
+    });
+  }
+
+  function sortItems(items) {
+    const copy = items.slice();
+    copy.sort((a, b) => a.sort_order - b.sort_order || a.item_name.localeCompare(b.item_name));
+    return copy;
+  }
+
+  function renderCard(item) {
+    const priceText = item.price === null ? "—" : "₹" + item.price.toFixed(item.price % 1 === 0 ? 0 : 2);
+    const dateTag = item.menu_date ? '<span class="menu-date">' + escapeHTML(item.menu_date) + '</span>' : "";
+    const noteHtml = item.note ? '<p class="note">' + escapeHTML(item.note) + '</p>' : "";
+    return (
+      '<li class="card status-' + item.availability + '">' +
+        '<div class="card-top">' +
+          '<h3>' + escapeHTML(item.item_name) + '</h3>' +
+          '<span class="price">' + priceText + '</span>' +
+        '</div>' +
+        '<div class="card-meta">' +
+          '<span class="badge-status ' + item.availability + '">' + item.availability + '</span>' +
+          dateTag +
+        '</div>' +
+        noteHtml +
+      '</li>'
+    );
+  }
+
+  function renderCategorySection(cat, items) {
+    return (
+      '<section class="category" aria-labelledby="cat-' + cat.key.replace(/\s+/g, "-") + '-heading">' +
+        '<div class="category-heading">' +
+          '<span class="badge" aria-hidden="true">' + cat.code + '</span>' +
+          '<h2 id="cat-' + cat.key.replace(/\s+/g, "-") + '-heading">' + escapeHTML(cat.label) + '</h2>' +
+          '<span class="category-count">' + items.length + (items.length === 1 ? " item" : " items") + '</span>' +
+        '</div>' +
+        '<ul class="card-grid" role="list">' +
+          items.map(renderCard).join("") +
+        '</ul>' +
+      '</section>'
+    );
+  }
+
+  function renderAll() {
+    const filtered = getFiltered();
+    let totalVisible = 0;
+    let activeCategories = 0;
+    let html = "";
+
+    CATEGORY_ORDER.forEach(cat => {
+      const items = sortItems(filtered.filter(it => it.category === cat.key));
+      if (items.length === 0) return;
+      activeCategories++;
+      totalVisible += items.length;
+      html += renderCategorySection(cat, items);
+    });
+
+    menuRoot.innerHTML = html;
+    emptyState.hidden = totalVisible > 0;
+    visibleCountEl.textContent = totalVisible + (totalVisible === 1 ? " item" : " items");
+    activeCategoryCountEl.textContent = activeCategories + (activeCategories === 1 ? " category" : " categories");
+  }
+
+  function renderSpecials() {
+    const items = sortItems(allItems.filter(it => it.category === "special" && it.availability !== "unavailable"));
+    if (items.length === 0) {
+      specialsStrip.hidden = true;
+      specialsRow.innerHTML = "";
+      return;
+    }
+    specialsRow.innerHTML = items.map(renderCard).join("");
+    specialsStrip.hidden = false;
+  }
+
+  /* ---------------------------- Theme toggle (no localStorage) ---------------------------- */
+  function setTheme(mode) {
+    document.documentElement.setAttribute("data-theme", mode);
+    themeToggle.setAttribute("aria-pressed", mode === "dark" ? "true" : "false");
+    themeToggle.textContent = mode === "dark" ? "☀️ Light mode" : "🌙 Dark mode";
+  }
+  function initTheme() {
+    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    setTheme(prefersDark ? "dark" : "light");
+  }
+  themeToggle.addEventListener("click", () => {
+    const current = document.documentElement.getAttribute("data-theme");
+    setTheme(current === "dark" ? "light" : "dark");
+  });
+
+  /* ---------------------------- Floating filters (mobile FAB) ---------------------------- */
+  function openControlsPanel() {
+    controlsPanel.classList.add("floating-mode");
+    controlsBackdrop.hidden = false;
+    controlsFab.setAttribute("aria-expanded", "true");
+    controlsClose.focus();
+  }
+  function closeControlsPanel() {
+    controlsPanel.classList.remove("floating-mode");
+    controlsBackdrop.hidden = true;
+    controlsFab.setAttribute("aria-expanded", "false");
+  }
+  controlsFab.addEventListener("click", () => {
+    if (controlsPanel.classList.contains("floating-mode")) closeControlsPanel();
+    else openControlsPanel();
+  });
+  controlsClose.addEventListener("click", closeControlsPanel);
+  controlsBackdrop.addEventListener("click", closeControlsPanel);
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && controlsPanel.classList.contains("floating-mode")) closeControlsPanel();
+  });
+
+  if ("IntersectionObserver" in window) {
+    const fabObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (controlsPanel.classList.contains("floating-mode")) return;
+        controlsFab.hidden = entry.isIntersecting;
+      });
+    }, { rootMargin: "-56px 0px 0px 0px" });
+    fabObserver.observe(controlsSentinel);
+  }
+
+  /* ---------------------------- Share today's menu ---------------------------- */
+  function buildShareText() {
+    const dateLabel = new Date().toLocaleDateString([], { weekday: "short", day: "numeric", month: "short", year: "numeric" });
+    let text = "VR Kanji Kada — Menu for " + dateLabel + "\n";
+    CATEGORY_ORDER.forEach(cat => {
+      const items = sortItems(allItems.filter(it => it.category === cat.key && it.availability !== "unavailable"));
+      if (items.length === 0) return;
+      text += "\n" + cat.label + ":\n";
+      items.forEach(it => {
+        const priceText = it.price === null ? "—" : "₹" + it.price.toFixed(it.price % 1 === 0 ? 0 : 2);
+        text += "• " + it.item_name + " — " + priceText + (it.availability === "limited" ? " (limited)" : "") + "\n";
+      });
+    });
+    text += "\n" + window.location.href;
+    return text;
+  }
+
+  async function shareMenu() {
+    const text = buildShareText();
+    const title = "VR Kanji Kada — Today's Menu";
+    if (navigator.share) {
+      try { await navigator.share({ title: title, text: text }); return; }
+      catch (err) { /* user cancelled or share failed — fall through to clipboard */ }
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      const original = shareBtn.innerHTML;
+      shareBtn.innerHTML = '<span aria-hidden="true">✅</span><span class="btn-label">Copied!</span>';
+      setTimeout(() => { shareBtn.innerHTML = original; }, 2000);
+    } catch (err) {
+      showError("Couldn't share or copy the menu automatically. Please select and copy the menu text manually.");
+    }
+  }
+  shareBtn.addEventListener("click", shareMenu);
+
+  /* ---------------------------- Wire up events ---------------------------- */
+  searchInput.addEventListener("input", renderAll);
+  categoryFilter.addEventListener("change", renderAll);
+  availabilityFilter.addEventListener("change", renderAll);
+  refreshBtn.addEventListener("click", () => fetchMenu(true));
+
+  populateCategoryFilter();
+  initTheme();
+  fetchMenu(true);
+})();
+</script>
+
+<!-- =========================================================================
+     GOOGLE SHEETS — REQUIRED COLUMNS (exact header names, first row of sheet)
+     category,item_name,price,availability,note,sort_order,menu_date
+
+     Allowed category values (case-insensitive):
+       breakfast, breads, lunch, dinner, veg curry, non veg curry,
+       naadan veg curry, naadan non veg curry, naadan kerala items,
+       noodles, fried rice, biriyani, fish items, snacks, hot drinks,
+       special, others
+
+     Allowed availability values (case-insensitive):
+       available, limited, unavailable
+
+     sort_order: any whole number, controls order within a category for the
+     "Default" sort (lower number = shown first). Leave blank if you don't
+     need control over ordering.
+
+     menu_date: optional. Free text such as "Today" or "10 Jul" shown as a
+     small tag on the card. Leave blank to hide it.
+
+     Tip: any item with category "special" and availability "available" or
+     "limited" automatically appears in the "Today's Specials" strip at the
+     top of the page, in addition to its normal category section.
+     ========================================================================= -->
+
+<!-- =========================================================================
+     GOOGLE SHEETS — HOW TO PUBLISH THE MENU (do this once)
+     1. Create a Google Sheet with one tab holding the menu, and make the
+        first row exactly: category,item_name,price,availability,note,sort_order,menu_date
+     2. Add one row per dish under that header, using only the allowed
+        category/availability values above.
+     3. In Google Sheets: File > Share > Publish to web.
+     4. Under "Link", choose the correct sheet tab (not "Entire document")
+        and choose "Comma-separated values (.csv)" as the format.
+     5. Click Publish, confirm, and copy the generated link.
+     6. Paste that link as the value of GOOGLE_SHEET_CSV_URL near the top of
+        the <script> in this file, save, and re-deploy (or just refresh if
+        already deployed — GitHub Pages serves the same file).
+     7. To update the menu later, staff only need to edit the Google
+        Sheet. The website re-reads it automatically every 2 minutes, and a
+        "Refresh now" button is also available on the page.
+     ========================================================================= -->
+
+<!-- =========================================================================
+     GOOGLE SHEETS — "CLOSED DAYS" TAB (optional, do this once)
+     Shows a red "Kitchen closed today" banner automatically on any date
+     you list — no code editing needed after setup.
+     1. In the same Google Sheet, add a new tab named "Closed Days".
+     2. First row exactly: date,reason
+        Example rows:
+          2026-08-15,College Independence Day holiday
+          2026-08-20,Kitchen closed for deep cleaning
+     3. Dates should be written as YYYY-MM-DD for reliability.
+     4. File > Share > Publish to web > choose the "Closed Days" tab > CSV
+        format > Publish > copy the link.
+     5. Paste that link as CLOSED_DAYS_CSV_URL near the top of the <script>
+        (right below GOOGLE_SHEET_CSV_URL).
+     6. To close unexpectedly today, just add a row with today's date and a
+        reason — the banner appears within one refresh cycle (2 minutes),
+        or immediately if someone taps "Refresh now".
+     7. To reopen, delete that row (or change the date to a different day).
+     ========================================================================= -->
+
+<!-- =========================================================================
+     GOOGLE SHEETS — ADD DROPDOWNS FOR "category" AND "availability" (optional)
+     Prevents typos (like "veg cury") that would otherwise silently push an
+     item into the "Others" category. Do this once per column:
+     1. Select the full "category" column (click the column letter), or just
+        the data cells if you prefer.
+     2. Menu: Data > Data validation > Add rule.
+     3. Criteria: "Dropdown" (or "List of items" on older Sheets versions).
+     4. Enter these values, one per line — copy exactly from the list of
+        allowed category values near the top of this comment block:
+          breakfast, breads, lunch, dinner, veg curry, non veg curry,
+          naadan veg curry, naadan non veg curry, naadan kerala items,
+          noodles, fried rice, biriyani, fish items, snacks, hot drinks,
+          special, others
+     5. Set "Invalid data" to "Reject input" so a typo can't be typed in.
+     6. Click Done.
+     7. Repeat for the "availability" column, using: available, limited,
+        unavailable
+     ========================================================================= -->
+
+
+<!-- =========================================================================
+     GITHUB PAGES — HOW TO DEPLOY (do this once)
+     1. Create a new GitHub repository (public works best for Pages).
+     2. Upload this file to the repository root and name it exactly index.html.
+     3. Go to Settings > Pages in the repository.
+     4. Under "Build and deployment", choose "Deploy from a branch", pick the
+        branch (usually main) and folder "/ (root)", then Save.
+     5. Wait a minute, then open the URL GitHub shows on that same Pages
+        settings screen — that is your live menu site.
+     6. Any future edits only need to happen in the Google Sheet, not here.
+     ========================================================================= -->
+
+</body>
+</html>
